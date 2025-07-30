@@ -3,15 +3,17 @@
 
 
         // const url_connect_to_socket = "https://socketio.darkube.app";
+
         const url_connect_to_socket = "http://localhost:3000";
 
         const socket = io(url_connect_to_socket, {
             transports: ['websocket'],
             timeout: 5000,
-            reconnectionAttempts: 1,
+            reconnectionAttempts: 3,
         });
 
         socket.on('connect', () => {
+            socket.emit('register', '1522fff');
             mode_connect_func("suc");
         });
 
@@ -27,7 +29,7 @@
             mode_connect_func("cansel");
         });
 
-        function mode_connect_func( mode_connect ) {
+        function mode_connect_func(mode_connect) {
 
             $(".container_check_connection .status-icon").removeClass("connected");
             $(".container_check_connection .status-icon").removeClass("disconnected");
@@ -48,9 +50,9 @@
                     $(".container_check_connection .status-icon").addClass("connected");
                     $(".container_check_connection .status-message").html("اتصال با موفقیت انجام شد");
 
-                    setTimeout( function () {
+                    setTimeout(function () {
                         $(".container_check_connection").removeClass("active");
-                    } , 1000)
+                    }, 1000)
 
                     break;
 
@@ -85,66 +87,69 @@
 
         socket.on('new-message', (data) => {
 
-            // ----------------------
-            // get message and add to array array_user_pv
-            let conversations_message = data.conversations;
-            conversations_message.forEach( function(item,key) {
+            if ( Object.keys(data).length > 0) {
 
-                // اگر پیوی وجود داشت اون را حذف کن
-                var index = array_user_pv.findIndex(function(item_find) {
-                    return item_find.id == item.sender_id;
-                });
-                if(index > -1) {
-                    array_user_pv.splice(index, 1);
-                }
+                // ----------------------
+                // get message and add to array array_user_pv
+                let conversations_message = data.conversations;
+                conversations_message.forEach(function (item, key) {
 
-                // اطلاعات pv
-                let user_pv = {
-                    name: item.sender_name,
-                    id: item.sender_id,
-                    messages: [
-                    ]
-                }
-                item.new_messages.forEach( function(item_new_messages,key_new_messages) {
-                    user_pv.messages.push({
-                        text_message: item_new_messages.text,
-                        status: "1",
-                        message_id: item_new_messages.message_id,
+                    // اگر پیوی وجود داشت اون را حذف کن
+                    var index = array_user_pv.findIndex(function (item_find) {
+                        return item_find.id == item.sender_id;
                     });
-                });
-                item.old_messages.forEach( function(item_old_messages,key_old_messages) {
-                    user_pv.messages.push({
-                        text_message: item_old_messages.text,
-                        status: "0",
-                        message_id: item_old_messages.message_id,
-                    });
-                });
-                array_user_pv.push(user_pv);
-            })
-
-            // ----------------------
-            // creat pv
-            array_user_pv.forEach(function ( itme , key ) {
-
-                let count_message = 0;
-                let last_message = "";
-                itme.messages.forEach(function (itme_message , key_message) {
-                    if ( itme_message.status == 1 ) {
-                        count_message +=1;
-                        last_message = itme_message.text_message;
+                    if (index > -1) {
+                        array_user_pv.splice(index, 1);
                     }
+
+                    // اطلاعات pv
+                    let user_pv = {
+                        name: item.sender_name,
+                        id: item.sender_id,
+                        messages: []
+                    }
+                    item.new_messages.forEach(function (item_new_messages, key_new_messages) {
+                        user_pv.messages.push({
+                            text_message: item_new_messages.text,
+                            status: "1",
+                            message_id: item_new_messages.message_id,
+                        });
+                    });
+                    item.old_messages.forEach(function (item_old_messages, key_old_messages) {
+                        user_pv.messages.push({
+                            text_message: item_old_messages.text,
+                            status: "0",
+                            message_id: item_old_messages.message_id,
+                        });
+                    });
+                    array_user_pv.push(user_pv);
                 })
 
-                let have_pv_or_no = getChatItemByIdPv(itme.id);
+                // ----------------------
+                // creat pv
+                array_user_pv.forEach(function (itme, key) {
 
-                if (have_pv_or_no == null) {
-                    creat_vp( itme.name , itme.id , last_message , count_message )
-                } else {
-                    edite_pv ( have_pv_or_no,count_message,last_message )
-                }
+                    let count_message = 0;
+                    let last_message = "";
+                    itme.messages.forEach(function (itme_message, key_message) {
+                        if (itme_message.status == 1) {
+                            count_message += 1;
+                            last_message = itme_message.text_message;
+                        }
+                    })
 
-            } )
+                    let have_pv_or_no = getChatItemByIdPv(itme.id);
+                    if (have_pv_or_no == null) {
+                        creat_vp(itme.name, itme.id, last_message, count_message)
+                    }
+                    else {
+                        edite_pv(have_pv_or_no, count_message, last_message)
+                    }
 
+                })
+            } else {
+                console.log("درخواست خالی است");
+            }
         });
 
         // ----------------------------------------------------------
@@ -155,10 +160,10 @@
 
         // creat_vp( "test" , 10 , "سلام وقت بخیر", 10 )
 
-        function creat_vp( name_vp="" , id_vp=-1 , lase_message="", number_new_massage="" ) {
+        function creat_vp(name_vp = "", id_vp = -1, lase_message = "", number_new_massage = "") {
             let target = $(".menu_show_cart_pv .chat-list");
-            let pv_html =  `<div class="chat-item" id_pv="${id_vp}" data-chat="4">
-                                <div class="chat-avatar"> ${ name_vp[0] || "N" } </div>
+            let pv_html = `<div class="chat-item" id_pv="${id_vp}" data-chat="4">
+                                <div class="chat-avatar"> ${name_vp[0] || "N"} </div>
                                 <div class="chat-info">
                                     <div class="chat-name"> ${name_vp} </div>
                                     <div class="chat-last-message"> ${lase_message} </div>
@@ -176,10 +181,10 @@
             var item = $('#sidebar .chat-item[id_pv="' + idPv + '"]');
             return item.length ? item : null;
         }
-        
+
         // اپدیت pv
-        
-        function edite_pv ( target_pv,numbrt_message,last_message ) {
+
+        function edite_pv(target_pv, numbrt_message, last_message) {
             target_pv.find(".unread-badge").html(numbrt_message);
             target_pv.find(".chat-last-message").html(last_message);
         }
@@ -190,7 +195,7 @@
         // ----------------------------------------------------------
 
 
-        $(".menu_show_cart_pv").on("click",".chat-item", function (e) {
+        $(".menu_show_cart_pv").on("click", ".chat-item", function (e) {
 
             $(".messages-container").html("");
 
@@ -203,29 +208,35 @@
             $(".chat-area .chat-header-avatar").html(name.trim()[0]);
 
 
-            // بررسی چت ها در ارایه
-            array_user_pv.forEach( function(item,key) {
+            $(this).find(".unread-badge").html("");
 
-                console.log(item)
+            // بررسی چت ها در ارایه
+            array_user_pv.forEach(function (item, key) {
 
                 // پیدا کردن مقادیر یوزر
-                if ( item.id == id.trim() ) {
+                if (item.id == id.trim()) {
 
                     // ارسال پیام های قدیمی
-                    item.messages.forEach( function(item_message,key_message) {
-                        if ( item_message.status == 0  ) {
+                    item.messages.forEach(function (item_message, key_message) {
+                        if (item_message.status == 0) {
                             let message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text_message} </div> </div>`;
                             $(".messages-container").append(message_box);
                         }
                     })
 
                     // ارسال پیام های جدید
-                    item.messages.forEach( function(item_message,key_message) {
-                        if ( item_message.status == 1  ) {
+                    item.messages.forEach(function (item_message, key_message) {
+                        if (item_message.status == 1) {
                             let message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text_message} </div> </div>`;
                             $(".messages-container").append(message_box);
                         }
                     })
+
+                    // بعد از این که صفحه جت بره پایین ترین قسمت اکرول بشه
+                    var $container = $('.messages-container');
+                    if ($container.length) {
+                        $container.scrollTop($container[0].scrollHeight);
+                    }
 
                 }
             })
