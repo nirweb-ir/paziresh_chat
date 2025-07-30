@@ -85,6 +85,9 @@
 
         socket.on('new-message', (data) => {
 
+
+            // get_message
+
             let conversations_message = data.conversations;
             conversations_message.forEach( function(item,key) {
                 let user_pv = {
@@ -109,9 +112,25 @@
                 });
                 array_user_pv.push(user_pv);
             })
-
-
             console.log(array_user_pv)
+
+            // ----------------------
+            // creat pv
+
+            array_user_pv.forEach(function ( itme , key ) {
+
+                let count_message = 0;
+                let last_message = "";
+                itme.messages.forEach(function (itme_message , key_message) {
+                    if ( itme_message.status == 1 ) {
+                        count_message +=1;
+                        last_message = itme_message.text_message;
+                    }
+                })
+                creat_vp( itme.name , itme.id , last_message , count_message )
+
+            } )
+
 
 
 
@@ -121,5 +140,40 @@
 
 
 
+
+
+
+
+    // ----------------------------------------------------------
+    // functions
+    // ----------------------------------------------------------
+
+    //  creat pv
+
+        function creat_vp( name_vp="" , id_vp=-1 , lase_message="", number_new_massage="" ) {
+            let target = $(".menu_show_cart_pv .chat-list");
+            let pv_html =  `<div class="chat-item" id_pv="${id_vp}" data-chat="4">
+                                <div class="chat-avatar"> ${ name_vp[0] || "N" } </div>
+                                <div class="chat-info">
+                                    <div class="chat-name"> ${name_vp} </div>
+                                    <div class="chat-last-message"> ${lase_message} </div>
+                                </div>
+                                <div class="chat-meta">
+                                   <div class="unread-badge">${number_new_massage} </div>
+                                </div>
+                            </div>`;
+            target.append(pv_html)
+        }
+
+    // ایا پیوی وجود دارد یا خیر
+        
+        function have_pv_or_no () {
+
+        }
+
+
+        
+
     })
 </script>
+
