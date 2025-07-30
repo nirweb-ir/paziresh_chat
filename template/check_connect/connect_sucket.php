@@ -90,6 +90,17 @@
 
             let conversations_message = data.conversations;
             conversations_message.forEach( function(item,key) {
+
+
+                // اگر پیوی وجود داشت اون را حذف کن
+                var index = array_user_pv.findIndex(function(item_find) {
+                    return item_find.id == item.sender_id;
+                });
+                if(index > -1) {
+                    array_user_pv.splice(index, 1);
+                }
+
+                // اطلاعات pv
                 let user_pv = {
                     name: item.sender_name,
                     id: item.sender_id,
@@ -112,7 +123,7 @@
                 });
                 array_user_pv.push(user_pv);
             })
-            console.log(array_user_pv)
+            // console.log(array_user_pv)
 
             // ----------------------
             // creat pv
@@ -127,14 +138,19 @@
                         last_message = itme_message.text_message;
                     }
                 })
-                creat_vp( itme.name , itme.id , last_message , count_message )
+
+                let have_pv_or_no = getChatItemByIdPv(itme.id);
+
+                if (have_pv_or_no == null) {
+                    creat_vp( itme.name , itme.id , last_message , count_message )
+                } else {
+
+                    console.log( "123" )
+
+                    edite_pv ( have_pv_or_no,count_message,last_message )
+                }
 
             } )
-
-
-
-
-
 
         });
 
@@ -166,11 +182,18 @@
         }
 
     // ایا پیوی وجود دارد یا خیر
-        
-        function have_pv_or_no () {
 
+        function getChatItemByIdPv(idPv) {
+            var item = $('#sidebar .chat-item[id_pv="' + idPv + '"]');
+            return item.length ? item : null;
         }
-
+        
+    // ایا پیوی وجود دارد یا خیر
+        
+        function edite_pv ( target_pv,numbrt_message,last_message ) {
+            target_pv.find(".unread-badge").html(numbrt_message);
+            target_pv.find(".chat-last-message").html(last_message);
+        }
 
         
 
