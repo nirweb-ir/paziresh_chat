@@ -85,12 +85,10 @@
 
         socket.on('new-message', (data) => {
 
-
-            // get_message
-
+            // ----------------------
+            // get message and add to array array_user_pv
             let conversations_message = data.conversations;
             conversations_message.forEach( function(item,key) {
-
 
                 // اگر پیوی وجود داشت اون را حذف کن
                 var index = array_user_pv.findIndex(function(item_find) {
@@ -123,11 +121,9 @@
                 });
                 array_user_pv.push(user_pv);
             })
-            // console.log(array_user_pv)
 
             // ----------------------
             // creat pv
-
             array_user_pv.forEach(function ( itme , key ) {
 
                 let count_message = 0;
@@ -144,9 +140,6 @@
                 if (have_pv_or_no == null) {
                     creat_vp( itme.name , itme.id , last_message , count_message )
                 } else {
-
-                    console.log( "123" )
-
                     edite_pv ( have_pv_or_no,count_message,last_message )
                 }
 
@@ -154,17 +147,13 @@
 
         });
 
+        // ----------------------------------------------------------
+        // functions
+        // ----------------------------------------------------------
 
+        //  creat pv
 
-
-
-
-
-    // ----------------------------------------------------------
-    // functions
-    // ----------------------------------------------------------
-
-    //  creat pv
+        // creat_vp( "test" , 10 , "سلام وقت بخیر", 10 )
 
         function creat_vp( name_vp="" , id_vp=-1 , lase_message="", number_new_massage="" ) {
             let target = $(".menu_show_cart_pv .chat-list");
@@ -181,21 +170,44 @@
             target.append(pv_html)
         }
 
-    // ایا پیوی وجود دارد یا خیر
+        // ایا پیوی وجود دارد یا خیر
 
         function getChatItemByIdPv(idPv) {
             var item = $('#sidebar .chat-item[id_pv="' + idPv + '"]');
             return item.length ? item : null;
         }
         
-    // ایا پیوی وجود دارد یا خیر
+        // اپدیت pv
         
         function edite_pv ( target_pv,numbrt_message,last_message ) {
             target_pv.find(".unread-badge").html(numbrt_message);
             target_pv.find(".chat-last-message").html(last_message);
         }
 
-        
+
+        // ----------------------------------------------------------
+        // switch pv
+        // ----------------------------------------------------------
+
+
+        $(".menu_show_cart_pv").on("click",".chat-item", function (e) {
+
+            $(".messages-container").html("");
+
+            let id = $(this).attr("id_pv");
+            let name = $(this).find(".chat-name").html();
+
+            $(".chat-area .chat-header-info h3").html(name);
+            $(".chat-area .chat-header-avatar").html(name.trim()[0]);
+            
+
+        })
+
+
+
+
+
+
 
     })
 </script>
