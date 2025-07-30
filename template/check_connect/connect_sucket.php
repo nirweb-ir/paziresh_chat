@@ -81,35 +81,39 @@
         // get data to socket
         // ----------------------------------------------------------
 
-        arr_users_pv = [];
-        user_new_message = [];
-
-
-        massage = [];
+        array_user_pv = [];
 
         socket.on('new-message', (data) => {
 
-            console.log(data);
-            console.log(data.recepient_id);
-            console.log(data.recepient_name);
-
             let conversations_message = data.conversations;
+            conversations_message.forEach( function(item,key) {
+                let user_pv = {
+                    name: item.sender_name,
+                    id: item.sender_id,
+                    messages: [
+                    ]
+                }
+                item.new_messages.forEach( function(item_new_messages,key_new_messages) {
+                    user_pv.messages.push({
+                        text_message: item_new_messages.text,
+                        status: "1",
+                        message_id: item_new_messages.message_id,
+                    });
+                });
+                item.old_messages.forEach( function(item_old_messages,key_old_messages) {
+                    user_pv.messages.push({
+                        text_message: item_old_messages.text,
+                        status: "0",
+                        message_id: item_old_messages.message_id,
+                    });
+                });
+                array_user_pv.push(user_pv);
+            })
 
-            conversations_message.forEach( function ( item , key ) {
-                console.log( item.sender_id )
-                arr_users_pv.push(item.sender_id);
-            } )
+
+            console.log(array_user_pv)
 
 
-            console.log(arr_users_pv)
-
-
-
-
-
-
-
-            let place = $(".messages-container");
 
 
 
