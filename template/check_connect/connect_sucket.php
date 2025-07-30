@@ -194,20 +194,43 @@
 
             $(".messages-container").html("");
 
+            // دریافت ایدی و نام
             let id = $(this).attr("id_pv");
             let name = $(this).find(".chat-name").html();
 
+            // قرار داد نام یوزر در هدر
             $(".chat-area .chat-header-info h3").html(name);
             $(".chat-area .chat-header-avatar").html(name.trim()[0]);
-            
+
+
+            // بررسی چت ها در ارایه
+            array_user_pv.forEach( function(item,key) {
+
+                console.log(item)
+
+                // پیدا کردن مقادیر یوزر
+                if ( item.id == id.trim() ) {
+
+                    // ارسال پیام های قدیمی
+                    item.messages.forEach( function(item_message,key_message) {
+                        if ( item_message.status == 0  ) {
+                            let message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text_message} </div> </div>`;
+                            $(".messages-container").append(message_box);
+                        }
+                    })
+
+                    // ارسال پیام های جدید
+                    item.messages.forEach( function(item_message,key_message) {
+                        if ( item_message.status == 1  ) {
+                            let message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text_message} </div> </div>`;
+                            $(".messages-container").append(message_box);
+                        }
+                    })
+
+                }
+            })
 
         })
-
-
-
-
-
-
 
     })
 </script>
