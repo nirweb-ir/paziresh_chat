@@ -109,22 +109,27 @@
                         id: item.sender_id,
                         messages: []
                     }
-                    item.new_messages.forEach(function (item_new_messages, key_new_messages) {
+
+
+                    console.log( item );
+
+                    item.messages.forEach(function (item_new_messages, key_new_messages) {
                         user_pv.messages.push({
-                            text_message: item_new_messages.text,
-                            status: "1",
                             message_id: item_new_messages.message_id,
+                            text: item_new_messages.text,
+                            timestamp: item_new_messages.timestamp,
+                            new_or_old: item_new_messages.new_or_old,
+                            role: item_new_messages.role
                         });
                     });
-                    item.old_messages.forEach(function (item_old_messages, key_old_messages) {
-                        user_pv.messages.push({
-                            text_message: item_old_messages.text,
-                            status: "0",
-                            message_id: item_old_messages.message_id,
-                        });
-                    });
+
                     array_user_pv.push(user_pv);
                 })
+
+
+                console.log( array_user_pv );
+
+
 
                 // ----------------------
                 // creat pv
@@ -132,6 +137,7 @@
 
                     let count_message = 0;
                     let last_message = "";
+                    
                     itme.messages.forEach(function (itme_message, key_message) {
                         if (itme_message.status == 1) {
                             count_message += 1;
@@ -146,7 +152,6 @@
                     else {
                         edite_pv(have_pv_or_no, count_message, last_message)
                     }
-
                 })
             } else {
                 console.log("درخواست خالی است");
