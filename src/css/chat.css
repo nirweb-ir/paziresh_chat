@@ -505,8 +505,6 @@ body {
 /* ---------------------------------------------------- */
 /* screen black */
 
-
-
 .screen_black {
     display: none;
 }
@@ -524,11 +522,158 @@ body {
     -webkit-backdrop-filter: blur(4px);
 }
 
+/* ---------------------------------------------------- */
+/* checkingg connect */
 
+ .popup-overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     z-index: 1000;
+     opacity: 0;
+     visibility: hidden;
+     transition: all 0.3s ease;
+ }
 
+.popup-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
 
+/* Popup Container */
+.popup-container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    min-width: 300px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: scale(0.7) translateY(-50px);
+    transition: all 0.3s ease;
+    position: relative;
+}
 
+.popup-overlay.active .popup-container {
+    transform: scale(1) translateY(0);
+}
 
+/* Status Icon */
+.status-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    transition: all 0.3s ease;
+}
+
+.status-icon.connected {
+    background-color: #e8f5e8;
+    color: #4caf50;
+    animation: pulse-green 2s infinite;
+}
+
+.status-icon.disconnected {
+    background-color: #ffeaea;
+    color: #f44336;
+    animation: pulse-red 2s infinite;
+}
+
+.status-icon.connecting {
+    background-color: #fff3cd;
+    color: #ff9800;
+    animation: spin 1s linear infinite;
+}
+
+/* Status Text */
+.status-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.status-message {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* Demo buttons */
+.demo-controls {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.demo-controls button {
+    margin: 5px;
+}
+
+/* Animations */
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+}
+
+@keyframes pulse-red {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(244, 67, 54, 0);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .popup-container {
+        margin: 20px;
+        min-width: auto;
+        max-width: calc(100% - 40px);
+    }
+}
 
 
 

@@ -13,9 +13,9 @@
 
         <?php
             func_message( "received" , "سلام، حالت چطوره؟" , "20:30" );
-            func_message( "send" , "سلام، حالت چطوره؟" , "20:30" );
-            func_message( "received" , "سلام، حالت چطوره؟" , "20:30" );
-            func_message( "send" , "سلام، حالت چطوره؟" , "20:30" );
+//            func_message( "send" , "سلام، حالت چطوره؟" , "20:30" );
+//            func_message( "received" , "سلام، حالت چطوره؟" , "20:30" );
+//            func_message( "send" , "سلام، حالت چطوره؟" , "20:30" );
         ?>
 
     </div>
