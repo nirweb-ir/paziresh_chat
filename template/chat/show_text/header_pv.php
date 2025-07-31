@@ -7,9 +7,9 @@
             <div class="chat-header" id="chatHeader">
 
             <div class="chat-header_container">
-                <div class="chat-header-avatar">ع</div>
+                <div class="chat-header-avatar"> <?= $name ?> </div>
                 <div class="chat-header-info">
-                    <h3>علی احمدی</h3>
+                    <h3> <?= $first_title_carecter ?> </h3>
                 </div>
             </div>
 

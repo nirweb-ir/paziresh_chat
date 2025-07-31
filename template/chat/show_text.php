@@ -6,13 +6,14 @@
 <div class="chat-area">
 
     <?php
-        func_header_pv( "f" , "علی پارسا" );
+//        func_header_pv( "f" , "علی پارسا" );
+        func_header_pv( "" , "" );
     ?>
 
     <div class="messages-container" id="messagesContainer">
 
         <?php
-            func_message( "received" , "سلام، حالت چطوره؟" , "20:30" );
+//            func_message( "received" , "سلام، حالت چطوره؟" , "20:30" );
 //            func_message( "send" , "سلام، حالت چطوره؟" , "20:30" );
 //            func_message( "received" , "سلام، حالت چطوره؟" , "20:30" );
 //            func_message( "send" , "سلام، حالت چطوره؟" , "20:30" );

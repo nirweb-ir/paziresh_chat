@@ -12,8 +12,6 @@ include "./template/check_connect/connect_check_pupop.php";
 
 include "./template/check_connect/connect_sucket.php";
 
-
-
 // -------------------------------------------
 // chat space
 

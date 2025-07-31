@@ -2,9 +2,8 @@
     jQuery(document).ready(function ($) {
 
 
-        // const url_connect_to_socket = "https://socketio.darkube.app";
-
-        const url_connect_to_socket = "http://localhost:3000";
+        const url_connect_to_socket = "https://socketchat.darkube.app";
+        // const url_connect_to_socket = "http://localhost:3000";
 
         const socket = io(url_connect_to_socket, {
             transports: ['websocket'],
@@ -79,9 +78,9 @@
         }
 
 
-        // ----------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------------
         // get data to socket
-        // ----------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------------
 
         array_user_pv = [];
 
@@ -110,9 +109,6 @@
                         messages: []
                     }
 
-
-                    console.log( item );
-
                     item.messages.forEach(function (item_new_messages, key_new_messages) {
                         user_pv.messages.push({
                             message_id: item_new_messages.message_id,
@@ -122,26 +118,21 @@
                             role: item_new_messages.role
                         });
                     });
-
                     array_user_pv.push(user_pv);
                 })
 
-
-                console.log( array_user_pv );
-
-
-
                 // ----------------------
                 // creat pv
+
                 array_user_pv.forEach(function (itme, key) {
 
                     let count_message = 0;
                     let last_message = "";
-                    
+
                     itme.messages.forEach(function (itme_message, key_message) {
-                        if (itme_message.status == 1) {
+                        if (itme_message.new_or_old == 1 ) {
                             count_message += 1;
-                            last_message = itme_message.text_message;
+                            last_message = itme_message.text;
                         }
                     })
 
@@ -152,19 +143,20 @@
                     else {
                         edite_pv(have_pv_or_no, count_message, last_message)
                     }
+
                 })
+
+
             } else {
                 console.log("درخواست خالی است");
             }
         });
 
-        // ----------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------------
         // functions
-        // ----------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------------
 
         //  creat pv
-
-        // creat_vp( "test" , 10 , "سلام وقت بخیر", 10 )
 
         function creat_vp(name_vp = "", id_vp = -1, lase_message = "", number_new_massage = "") {
             let target = $(".menu_show_cart_pv .chat-list");
@@ -196,9 +188,9 @@
         }
 
 
-        // ----------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------------
         // switch pv
-        // ----------------------------------------------------------
+        // --------------------------------------------------------------------------------------------------------------------
 
 
         $(".menu_show_cart_pv").on("click", ".chat-item", function (e) {
@@ -222,20 +214,18 @@
                 // پیدا کردن مقادیر یوزر
                 if (item.id == id.trim()) {
 
-                    // ارسال پیام های قدیمی
-                    item.messages.forEach(function (item_message, key_message) {
-                        if (item_message.status == 0) {
-                            let message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text_message} </div> </div>`;
-                            $(".messages-container").append(message_box);
-                        }
-                    })
-
                     // ارسال پیام های جدید
                     item.messages.forEach(function (item_message, key_message) {
-                        if (item_message.status == 1) {
-                            let message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text_message} </div> </div>`;
-                            $(".messages-container").append(message_box);
+
+                        console.log(item_message)
+                        let message_box = "";
+                        if (item_message.role === "requester") {
+                             message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text} </div> </div>`;
                         }
+                        else {
+                             message_box = `<div class="message sent"> <div class="message-bubble"> ${item_message.text} </div> </div>`;
+                        }
+                        $(".messages-container").append(message_box);
                     })
 
                     // بعد از این که صفحه جت بره پایین ترین قسمت اکرول بشه
