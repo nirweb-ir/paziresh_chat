@@ -14,6 +14,18 @@
         socket.on('connect', () => {
             socket.emit('register', '1522fff');
             mode_connect_func("suc");
+
+
+            //  در خواست به n8n برای این که چت هارا ارسال کند
+            callApi(
+                'https://n8n.nirweb.ir/webhook/d1ed6401-b66b-49f5-ad2e-a2d3f5c546f0',
+                'POST',
+                { email: 'someone@example.com', password: 'yourpass' }
+            )
+            .then(data => console.log(data))
+            .catch(err => console.error(err));
+
+
         });
 
         socket.on('connect_error', (error) => {
@@ -238,6 +250,11 @@
             })
 
         })
+
+
+
+
+
 
     })
 </script>
