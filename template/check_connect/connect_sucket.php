@@ -23,7 +23,7 @@
             callApi(
                 'https://n8n.nirweb.ir/webhook/d1ed6401-b66b-49f5-ad2e-a2d3f5c546f0',
                 'POST',
-                { user_id: 'someone@example.com', password: 'yourpass' }
+                { user_id: user_id_connect_to_socket, type_res: 'get_all_message' }
             )
             .then(data => console.log(data))
             .catch(err => console.error(err));
