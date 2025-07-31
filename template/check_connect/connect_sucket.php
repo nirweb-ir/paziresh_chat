@@ -4,7 +4,6 @@
 
         user_id_connect_to_socket = "123_id_user";
 
-
         const url_connect_to_socket = "https://socketchat.darkube.app";
         // const url_connect_to_socket = "http://localhost:3000";
 
@@ -18,7 +17,7 @@
             socket.emit('register', user_id_connect_to_socket);
             mode_connect_func("suc");
 
-
+            
             //  در خواست به n8n برای این که چت هارا ارسال کند
             callApi(
                 'https://n8n.nirweb.ir/webhook/d1ed6401-b66b-49f5-ad2e-a2d3f5c546f0',
