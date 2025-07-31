@@ -2,6 +2,9 @@
     jQuery(document).ready(function ($) {
 
 
+        user_id_connect_to_socket = "123_id_user";
+
+
         const url_connect_to_socket = "https://socketchat.darkube.app";
         // const url_connect_to_socket = "http://localhost:3000";
 
@@ -12,7 +15,7 @@
         });
 
         socket.on('connect', () => {
-            socket.emit('register', '1522fff');
+            socket.emit('register', user_id_connect_to_socket);
             mode_connect_func("suc");
 
 
@@ -20,7 +23,7 @@
             callApi(
                 'https://n8n.nirweb.ir/webhook/d1ed6401-b66b-49f5-ad2e-a2d3f5c546f0',
                 'POST',
-                { email: 'someone@example.com', password: 'yourpass' }
+                { user_id: 'someone@example.com', password: 'yourpass' }
             )
             .then(data => console.log(data))
             .catch(err => console.error(err));
