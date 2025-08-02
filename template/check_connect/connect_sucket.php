@@ -2,7 +2,7 @@
     jQuery(document).ready(function ($) {
 
 
-        user_id_connect_to_socket = "123_id_user";
+        user_id_connect_to_socket = "6eb14e4f-e0dc-4497-b327-c525ae962338";
 
         const url_connect_to_socket = "https://socketchat.darkube.app";
         // const url_connect_to_socket = "http://localhost:3000";
@@ -17,16 +17,17 @@
             socket.emit('register', user_id_connect_to_socket);
             mode_connect_func("suc");
 
-            
+
             //  در خواست به n8n برای این که چت هارا ارسال کند
             callApi(
                 'https://n8n.nirweb.ir/webhook/d1ed6401-b66b-49f5-ad2e-a2d3f5c546f0',
                 'POST',
                 { user_id: user_id_connect_to_socket, type_res: 'get_all_message' }
-            )
-            .then(data => console.log(data))
-            .catch(err => console.error(err));
+            ).catch(err => console.error(err));
 
+
+                // .then(data => console.log(data))
+                // .catch(err => console.error(err));
 
         });
 
@@ -164,6 +165,7 @@
             } else {
                 console.log("درخواست خالی است");
             }
+
         });
 
         // --------------------------------------------------------------------------------------------------------------------
@@ -228,18 +230,11 @@
                 // پیدا کردن مقادیر یوزر
                 if (item.id == id.trim()) {
 
-                    // ارسال پیام های جدید
+                    // ارسال پیام های
                     item.messages.forEach(function (item_message, key_message) {
 
-                        console.log(item_message)
-                        let message_box = "";
-                        if (item_message.role === "requester") {
-                             message_box = `<div class="message received"> <div class="message-bubble"> ${item_message.text} </div> </div>`;
-                        }
-                        else {
-                             message_box = `<div class="message sent"> <div class="message-bubble"> ${item_message.text} </div> </div>`;
-                        }
-                        $(".messages-container").append(message_box);
+                        creat_message( item_message.role , item_message.text , item_message.new_or_old , item_message.message_id , id );
+
                     })
 
                     // بعد از این که صفحه جت بره پایین ترین قسمت اکرول بشه
@@ -254,9 +249,51 @@
         })
 
 
+        // --------------------------------------------------------------------------------------------------------------------
+        // function sin query
+        // --------------------------------------------------------------------------------------------------------------------
 
+        
+        function creat_message ( role , text , new_or_old , message_id, id_pv="" ) {
 
+            //  ساخت پیام
 
+            let message_box = "";
+            if (role === "requester") {
+                message_box = `<div class="message received"> <div class="message-bubble"> ${text} </div> </div>`;
+            } else {
+                message_box = `<div class="message sent"> <div class="message-bubble"> ${text} </div> </div>`;
+            }
+
+            //  اپند کردن پیام
+
+            $(".messages-container").append(message_box);
+
+            //  api سین کردن پیام
+
+            if ( new_or_old == true ) {
+                callApi(
+                    'https://n8n.nirweb.ir/webhook/7315fbb0-e2f2-4d9a-802c-f478a2bd1533',
+                    'POST',
+                    { id_message: message_id }
+                ).then(data => console.log(data)).catch(err => console.error(err));
+            }
+
+            //  پیام را به سین شده اپدیت میکنه
+
+            array_user_pv.forEach( function ( item_find_pv , key_find_pv ) {
+                if ( item_find_pv.id == id_pv ) {
+                    item_find_pv.messages.forEach(function ( item_update_message , key_update_message ) {
+                        if ( item_update_message.message_id == message_id ) {
+                            item_update_message.new_or_old = false;
+                        }
+                    })
+                }
+            })
+
+        }
+        
+        
 
     })
 </script>
