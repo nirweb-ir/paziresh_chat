@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="./src/css/chat.css">
 
 
-
-
-
     <script src="./src/js/call_api.js"></script>
     <script src="./src/js/general/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>

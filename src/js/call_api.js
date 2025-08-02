@@ -1,6 +1,4 @@
 
-
-
 function callApi(url, method, jsonData) {
     return fetch(url, {
         method: method,

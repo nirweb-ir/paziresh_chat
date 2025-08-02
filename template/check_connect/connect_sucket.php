@@ -145,7 +145,7 @@
                     let last_message = "";
 
                     itme.messages.forEach(function (itme_message, key_message) {
-                        if (itme_message.new_or_old == 1 ) {
+                        if (itme_message.new_or_old == 1  &&  itme_message.role == "requester" ) {
                             count_message += 1;
                             last_message = itme_message.text;
                         }
@@ -161,6 +161,11 @@
 
                 })
 
+
+                // ----------------------
+                // ذخیره کردن سشن
+
+                sessionStorage.setItem('array_user_pv', JSON.stringify(array_user_pv) );
 
             } else {
                 console.log("درخواست خالی است");
@@ -208,7 +213,6 @@
         // switch pv
         // --------------------------------------------------------------------------------------------------------------------
 
-
         $(".menu_show_cart_pv").on("click", ".chat-item", function (e) {
 
             $(".messages-container").html("");
@@ -220,9 +224,12 @@
             // قرار داد نام یوزر در هدر
             $(".chat-area .chat-header-info h3").html(name);
             $(".chat-area .chat-header-avatar").html(name.trim()[0]);
-
+            $(".chat-header").attr("id_pv", id);
 
             $(this).find(".unread-badge").html("");
+
+
+            array_user_pv = JSON.parse( sessionStorage.getItem('array_user_pv') );
 
             // بررسی چت ها در ارایه
             array_user_pv.forEach(function (item, key) {
@@ -232,9 +239,7 @@
 
                     // ارسال پیام های
                     item.messages.forEach(function (item_message, key_message) {
-
                         creat_message( item_message.role , item_message.text , item_message.new_or_old , item_message.message_id , id );
-
                     })
 
                     // بعد از این که صفحه جت بره پایین ترین قسمت اکرول بشه
@@ -248,12 +253,10 @@
 
         })
 
-
         // --------------------------------------------------------------------------------------------------------------------
         // function sin query
         // --------------------------------------------------------------------------------------------------------------------
 
-        
         function creat_message ( role , text , new_or_old , message_id, id_pv="" ) {
 
             //  ساخت پیام
@@ -271,7 +274,7 @@
 
             //  api سین کردن پیام
 
-            if ( new_or_old == true ) {
+            if ( new_or_old == true && role == "requester" ) {
                 callApi(
                     'https://n8n.nirweb.ir/webhook/7315fbb0-e2f2-4d9a-802c-f478a2bd1533',
                     'POST',
@@ -281,20 +284,22 @@
 
             //  پیام را به سین شده اپدیت میکنه
 
+            array_user_pv = JSON.parse( sessionStorage.getItem('array_user_pv') );
+
             array_user_pv.forEach( function ( item_find_pv , key_find_pv ) {
                 if ( item_find_pv.id == id_pv ) {
                     item_find_pv.messages.forEach(function ( item_update_message , key_update_message ) {
-                        if ( item_update_message.message_id == message_id ) {
+                        if ( item_update_message.message_id == message_id  && item_update_message.role == "requester" ) {
                             item_update_message.new_or_old = false;
                         }
                     })
                 }
             })
 
+            sessionStorage.setItem('array_user_pv' , JSON.stringify(array_user_pv) )
+
         }
-        
-        
-
     })
-</script>
 
+
+</script>

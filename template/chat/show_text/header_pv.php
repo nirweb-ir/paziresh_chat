@@ -4,7 +4,7 @@
     function func_header_pv( $first_title_carecter = "" , $name = "" ) {
         ?>
 
-            <div class="chat-header" id="chatHeader">
+            <div id_pv="" class="chat-header" id="chatHeader">
 
             <div class="chat-header_container">
                 <div class="chat-header-avatar"> <?= $name ?> </div>
