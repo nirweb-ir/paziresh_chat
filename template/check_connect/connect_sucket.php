@@ -236,8 +236,29 @@
 
                         } else {
 
-                            
+                            let array_user_pv =  JSON.parse(sessionStorage.getItem('array_user_pv'));
 
+                            array_user_pv.push({
+                                name: sender_name,
+                                id: sender_id,
+                                messages: []
+                            })
+
+                            array_user_pv.forEach(function (item , key) {
+                                if ( item.id == sender_id )  {
+                                    item.messages.push({
+                                        message_id: _message_id_,
+                                        text: _text_,
+                                        timestamp: _timestamp_,
+                                        new_or_old: _new_or_old_,
+                                        role: _role_
+                                    })
+                                }
+                            })
+
+                            sessionStorage.setItem('array_user_pv' , JSON.stringify(array_user_pv));
+
+                            creat_vp( sender_name , sender_id , _text_ , 1 )
                         }
 
                     }
