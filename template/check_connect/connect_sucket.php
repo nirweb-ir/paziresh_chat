@@ -4,6 +4,11 @@
 
         user_id_connect_to_socket = "6eb14e4f-e0dc-4497-b327-c525ae962338";
 
+        // save id in section
+        sessionStorage.setItem('id_client',user_id_connect_to_socket );
+
+
+
         const url_connect_to_socket = "https://socketchat.darkube.app";
         // const url_connect_to_socket = "http://localhost:3000";
 
@@ -20,11 +25,10 @@
 
             //  در خواست به n8n برای این که چت هارا ارسال کند
             callApi(
-                'https://n8n.nirweb.ir/webhook/d1ed6401-b66b-49f5-ad2e-a2d3f5c546f0',
+                'https://n8n.nirweb.ir/webhook/get_first_chat',
                 'POST',
                 { user_id: user_id_connect_to_socket, type_res: 'get_all_message' }
             ).catch(err => console.error(err));
-
 
                 // .then(data => console.log(data))
                 // .catch(err => console.error(err));
@@ -161,7 +165,6 @@
 
                 })
 
-
                 // ----------------------
                 // ذخیره کردن سشن
 
@@ -276,7 +279,7 @@
 
             if ( new_or_old == true && role == "requester" ) {
                 callApi(
-                    'https://n8n.nirweb.ir/webhook/7315fbb0-e2f2-4d9a-802c-f478a2bd1533',
+                    'https://n8n.nirweb.ir/webhook/sin_message',
                     'POST',
                     { id_message: message_id }
                 ).then(data => console.log(data)).catch(err => console.error(err));

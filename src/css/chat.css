@@ -261,6 +261,13 @@ body {
     display: flex;
     align-items: flex-end;
     gap: 10px;
+
+    transition: ease 0.1s All;
+}
+
+.message.dont_Sin {
+    opacity: 0.5;
+    transition: ease 0.1s All;
 }
 
 .message.sent {
