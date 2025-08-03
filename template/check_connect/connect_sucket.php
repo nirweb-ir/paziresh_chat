@@ -7,8 +7,6 @@
         // save id in section
         sessionStorage.setItem('id_client',user_id_connect_to_socket );
 
-
-
         const url_connect_to_socket = "https://socketchat.darkube.app";
         // const url_connect_to_socket = "http://localhost:3000";
 
@@ -105,72 +103,82 @@
 
         socket.on('new-message', (data) => {
 
-            if ( Object.keys(data).length > 0) {
+            if ( Object.keys(data).length > 0)
+            {
 
-                // ----------------------
-                // get message and add to array array_user_pv
+                if ( data.message_mode == "preliminary_report" ) {
 
-                let conversations_message = data.conversations;
-                conversations_message.forEach(function (item, key) {
+                    // ----------------------
+                    // get message and add to array array_user_pv
 
-                    // اگر پیوی وجود داشت اون را حذف کن
-                    var index = array_user_pv.findIndex(function (item_find) {
-                        return item_find.id == item.sender_id;
-                    });
-                    if (index > -1) {
-                        array_user_pv.splice(index, 1);
-                    }
+                    let conversations_message = data.conversations;
+                    conversations_message.forEach(function (item, key) {
 
-                    // اطلاعات pv
-                    let user_pv = {
-                        name: item.sender_name,
-                        id: item.sender_id,
-                        messages: []
-                    }
-
-                    item.messages.forEach(function (item_new_messages, key_new_messages) {
-                        user_pv.messages.push({
-                            message_id: item_new_messages.message_id,
-                            text: item_new_messages.text,
-                            timestamp: item_new_messages.timestamp,
-                            new_or_old: item_new_messages.new_or_old,
-                            role: item_new_messages.role
+                        // اگر پیوی وجود داشت اون را حذف کن
+                        var index = array_user_pv.findIndex(function (item_find) {
+                            return item_find.id == item.sender_id;
                         });
-                    });
-                    array_user_pv.push(user_pv);
-                })
-
-                // ----------------------
-                // creat pv
-
-                array_user_pv.forEach(function (itme, key) {
-
-                    let count_message = 0;
-                    let last_message = "";
-
-                    itme.messages.forEach(function (itme_message, key_message) {
-                        if (itme_message.new_or_old == 1  &&  itme_message.role == "requester" ) {
-                            count_message += 1;
-                            last_message = itme_message.text;
+                        if (index > -1) {
+                            array_user_pv.splice(index, 1);
                         }
+
+                        // اطلاعات pv
+                        let user_pv = {
+                            name: item.sender_name,
+                            id: item.sender_id,
+                            messages: []
+                        }
+
+                        item.messages.forEach(function (item_new_messages, key_new_messages) {
+                            user_pv.messages.push({
+                                message_id: item_new_messages.message_id,
+                                text: item_new_messages.text,
+                                timestamp: item_new_messages.timestamp,
+                                new_or_old: item_new_messages.new_or_old,
+                                role: item_new_messages.role
+                            });
+                        });
+                        array_user_pv.push(user_pv);
                     })
 
-                    let have_pv_or_no = getChatItemByIdPv(itme.id);
-                    if (have_pv_or_no == null) {
-                        creat_vp(itme.name, itme.id, last_message, count_message)
-                    }
-                    else {
-                        edite_pv(have_pv_or_no, count_message, last_message)
-                    }
+                    // ----------------------
+                    // creat pv
 
-                })
+                    array_user_pv.forEach(function (itme, key) {
 
-                // ----------------------
-                // ذخیره کردن سشن
+                        let count_message = 0;
+                        let last_message = "";
 
-                sessionStorage.setItem('array_user_pv', JSON.stringify(array_user_pv) );
+                        itme.messages.forEach(function (itme_message, key_message) {
+                            if (itme_message.new_or_old == 1  &&  itme_message.role == "requester" ) {
+                                count_message += 1;
+                                last_message = itme_message.text;
+                            }
+                        })
 
-            } else {
+                        let have_pv_or_no = getChatItemByIdPv(itme.id);
+                        if (have_pv_or_no == null) {
+                            creat_vp(itme.name, itme.id, last_message, count_message)
+                        }
+                        else {
+                            edite_pv(have_pv_or_no, count_message, last_message)
+                        }
+
+                    })
+
+                    // ----------------------
+                    // ذخیره کردن سشن
+
+                    sessionStorage.setItem('array_user_pv', JSON.stringify(array_user_pv) );
+
+                }
+                else {
+                    alert("oklok");
+                }
+
+            }
+            else
+            {
                 console.log("درخواست خالی است");
             }
 
@@ -234,25 +242,42 @@
 
             array_user_pv = JSON.parse( sessionStorage.getItem('array_user_pv') );
 
-            // بررسی چت ها در ارایه
-            array_user_pv.forEach(function (item, key) {
 
+            let save_id_message_from_sort = [];
+            let save_id_message_text = [];
+
+            // بررسی چت ها در ارایه
+
+            array_user_pv.forEach(function (item, key) {
                 // پیدا کردن مقادیر یوزر
                 if (item.id == id.trim()) {
-
                     // ارسال پیام های
                     item.messages.forEach(function (item_message, key_message) {
-                        creat_message( item_message.role , item_message.text , item_message.new_or_old , item_message.message_id , id );
+                        save_id_message_from_sort.push( item_message.message_id );
+                        save_id_message_text.push( item_message );
                     })
-
-                    // بعد از این که صفحه جت بره پایین ترین قسمت اکرول بشه
-                    var $container = $('.messages-container');
-                    if ($container.length) {
-                        $container.scrollTop($container[0].scrollHeight);
-                    }
-
                 }
             })
+
+
+            // ارسال پیام بر اساس سورت
+
+            save_id_message_from_sort.sort((a, b) => a - b);
+
+            for ( i=0 ; i<save_id_message_from_sort.length ; i++ ) {
+                for ( e=0 ; e<save_id_message_text.length ; e++ ) {
+                    if ( save_id_message_text[e].message_id == save_id_message_from_sort[i] ) {
+                        creat_message( save_id_message_text[e].role , save_id_message_text[e].text , save_id_message_text[e].new_or_old , save_id_message_text[e].message_id , id );
+                        break;
+                    }
+                }
+            }
+
+            // بعد از این که صفحه جت بره پایین ترین قسمت اکرول بشه
+            var $container = $('.messages-container');
+            if ($container.length) {
+                $container.scrollTop($container[0].scrollHeight);
+            }
 
         })
 

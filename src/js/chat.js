@@ -54,6 +54,9 @@ jQuery(document).ready(function ($) {
 
         let class_new_message_hiden = "";
         array_user_pv = JSON.parse( sessionStorage.getItem('array_user_pv') );
+
+        console.log(array_user_pv)
+
         array_user_pv.forEach( function ( Item_ , Key_ ) {
             if ( Item_.id == pv_focus ) {
 
@@ -118,8 +121,6 @@ jQuery(document).ready(function ($) {
     function sin_message (data) {
         $(`.${data.id_chat}`).removeClass(`dont_Sin`);
     }
-
-
 
 
 })
