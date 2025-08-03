@@ -106,7 +106,8 @@
             if ( Object.keys(data).length > 0)
             {
 
-                if ( data.message_mode == "preliminary_report" ) {
+                if ( data.message_mode == "preliminary_report" )
+                {
 
                     // ----------------------
                     // get message and add to array array_user_pv
@@ -172,15 +173,77 @@
                     sessionStorage.setItem('array_user_pv', JSON.stringify(array_user_pv) );
 
                 }
-                else {
-                    alert("oklok");
-                }
+                else if ( data.message_mode == "new_message" )
+                {
+                    // دریافت پیام جدید
 
+                    let array_user_pv =  JSON.parse(sessionStorage.getItem('array_user_pv'));
+
+                    // اگر خالی نبود
+
+                    if (!array_user_pv || array_user_pv.length === 0) { } else {
+
+                        let sender_id = data.conversations[0].sender_id;
+                        let sender_name = data.conversations[0].sender_name;
+                        let sender_message = data.conversations[0].messages;
+
+                        let _message_id_ = sender_message[0].message_id;
+                        let _text_ = sender_message[0].text;
+                        let _timestamp_ = sender_message[0].timestamp;
+                        let _new_or_old_ = sender_message[0].new_or_old;
+                        let _role_ = sender_message[0].role;
+
+                        let find_pv = false;
+
+                        array_user_pv.forEach( function ( item_ ,  key_ ) {
+                            if ( sender_id == item_.id ) {
+
+                                find_pv = true;
+
+                                item_.messages.push({
+                                    message_id: _message_id_,
+                                    text: _text_,
+                                    timestamp: _timestamp_,
+                                    new_or_old: _new_or_old_,
+                                    role: _role_
+                                });
+                            }
+                        })
+
+                        sessionStorage.setItem('array_user_pv' , JSON.stringify(array_user_pv));
+
+                        // اگر پیوی وجود داشت
+                        // اگر وجود نداشت یک پیوی بساز
+                        if( find_pv == true ) {
+
+                            // بررسی این که ایا فکوس هیتیم روی پیوی یا خیر
+                            // اگر فوکوس نکردی دانتر براش بنداز
+
+                            var id_pv = $(".chat-header").attr("id_pv");
+                            if (id_pv == sender_id)
+                            {
+                                creat_message ( _role_ , _text_ , _new_or_old_ , _message_id_, sender_id )
+                            }
+                            else
+                            {
+
+                                const badgeHtml = $(`.chat-item[id_pv="${sender_id}"] .unread-badge`).html();
+                                let unreadCount = Number(badgeHtml) || 0;
+                                unreadCount += 1;
+                                $(`.chat-item[id_pv="${sender_id}"] .unread-badge`).html(unreadCount);
+
+                            }
+
+                        } else {
+
+                            
+
+                        }
+
+                    }
+                }
             }
-            else
-            {
-                console.log("درخواست خالی است");
-            }
+            else { console.log("درخواست خالی است"); }
 
         });
 
@@ -325,6 +388,18 @@
             })
 
             sessionStorage.setItem('array_user_pv' , JSON.stringify(array_user_pv) )
+
+
+            //  حرکت نرم به پایین ترین قسمت
+
+            const container = document.querySelector('.messages-container');
+            if (container) {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+
 
         }
     })
