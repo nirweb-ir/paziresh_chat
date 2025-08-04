@@ -612,6 +612,11 @@ body {
     animation: get_message_info 2s infinite;
 }
 
+.status-icon.dont_have_message {
+    background-color: #fff3cd;
+    color: #ff9800;
+}
+
 /* Status Text */
 .status-title {
     font-size: 18px;
