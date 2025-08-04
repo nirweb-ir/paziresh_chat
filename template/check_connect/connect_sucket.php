@@ -21,15 +21,34 @@
             mode_connect_func("suc");
 
 
-            //  در خواست به n8n برای این که چت هارا ارسال کند
-            callApi(
-                'https://n8n.nirweb.ir/webhook/get_first_chat',
-                'POST',
-                { user_id: user_id_connect_to_socket, type_res: 'get_all_message' }
-            ).catch(err => console.error(err));
+            $(".container_check_connection #iconSymbol").html("✓");
+            $(".container_check_connection .status-icon").addClass("connected");
+            $(".container_check_connection .status-message").html("اتصال با موفقیت انجام شد");
 
-                // .then(data => console.log(data))
-                // .catch(err => console.error(err));
+
+
+            setTimeout(function () {
+                $(".container_check_connection #iconSymbol").html("📩");
+                $(".container_check_connection .status-icon").addClass("get_message");
+                $(".container_check_connection .status-message").html("درحال دریافت پیام ها");
+
+                //  در خواست به n8n برای این که چت هارا ارسال کند
+                callApi(
+                    'https://n8n.nirweb.ir/webhook/get_first_chat',
+                    'POST',
+                    { user_id: user_id_connect_to_socket, type_res: 'get_all_message' }
+                )
+                .then(data => {
+                    if (data.res && data.res.length > 0) {
+                        if ( data.res == "fail" ) {
+                            mode_connect_func("Err");
+                        }
+                    }
+                })
+                .catch(err => console.error(err));
+
+            }, 1000)
+
 
         });
 
@@ -50,6 +69,7 @@
             $(".container_check_connection .status-icon").removeClass("connected");
             $(".container_check_connection .status-icon").removeClass("disconnected");
             $(".container_check_connection .status-icon").removeClass("connecting");
+            $(".container_check_connection .status-icon").removeClass("get_message");
 
             switch (mode_connect) {
 
@@ -57,18 +77,20 @@
 
                     $(".container_check_connection #iconSymbol").html("✗");
                     $(".container_check_connection .status-icon").addClass("disconnected");
-                    $(".container_check_connection .status-message").html("اتصال نا موفق مجدد تلاش کنید");
+                    $(".container_check_connection .status-message").html("اتصال ناموفق مجدد تلاش کنید");
 
                     break;
 
                 case "suc":
-                    $(".container_check_connection #iconSymbol").html("✓");
-                    $(".container_check_connection .status-icon").addClass("connected");
-                    $(".container_check_connection .status-message").html("اتصال با موفقیت انجام شد");
 
-                    setTimeout(function () {
-                        $(".container_check_connection").removeClass("active");
-                    }, 1000)
+                    // $(".container_check_connection #iconSymbol").html("✓");
+                    // $(".container_check_connection .status-icon").addClass("connected");
+                    // $(".container_check_connection .status-message").html("اتصال با موفقیت انجام شد");
+                    // setTimeout(function () {
+                    //     $(".container_check_connection #iconSymbol").html("📩");
+                    //     $(".container_check_connection .status-icon").addClass("get_message");
+                    //     $(".container_check_connection .status-message").html("درحال دریافت پیام ها");
+                    // }, 1000)
 
                     break;
 
@@ -102,6 +124,8 @@
         array_user_pv = [];
 
         socket.on('new-message', (data) => {
+
+            $(".container_check_connection").removeClass("active");
 
             if ( Object.keys(data).length > 0)
             {
@@ -422,8 +446,6 @@
                 });
             }
         }
-
-        
         
     })
 

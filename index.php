@@ -23,6 +23,5 @@ include "./template/chat/show_text.php";
 
 echo "</div>";
 
-
 include "./footer.php";
 ?>
