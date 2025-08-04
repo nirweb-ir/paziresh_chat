@@ -391,7 +391,9 @@
                     'https://n8n.nirweb.ir/webhook/sin_message',
                     'POST',
                     { id_message: message_id }
-                ).then(data => console.log(data)).catch(err => console.error(err));
+                )
+                .then(data => console.log(data) )
+                .catch(err => console.error(err));
             }
 
             //  پیام را به سین شده اپدیت میکنه
@@ -409,8 +411,7 @@
             })
 
             sessionStorage.setItem('array_user_pv' , JSON.stringify(array_user_pv) )
-
-
+            
             //  حرکت نرم به پایین ترین قسمت
 
             const container = document.querySelector('.messages-container');
@@ -420,9 +421,10 @@
                     behavior: 'smooth'
                 });
             }
-
-
         }
+
+        
+        
     })
 
 
