@@ -83,14 +83,7 @@
 
                 case "suc":
 
-                    // $(".container_check_connection #iconSymbol").html("✓");
-                    // $(".container_check_connection .status-icon").addClass("connected");
-                    // $(".container_check_connection .status-message").html("اتصال با موفقیت انجام شد");
-                    // setTimeout(function () {
-                    //     $(".container_check_connection #iconSymbol").html("📩");
-                    //     $(".container_check_connection .status-icon").addClass("get_message");
-                    //     $(".container_check_connection .status-message").html("درحال دریافت پیام ها");
-                    // }, 1000)
+                    console.log("connect")
 
                     break;
 
@@ -202,6 +195,9 @@
                     // دریافت پیام جدید
 
                     let array_user_pv =  JSON.parse(sessionStorage.getItem('array_user_pv'));
+
+
+
 
                     // اگر خالی نبود
 
