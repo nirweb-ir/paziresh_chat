@@ -1,5 +1,5 @@
 
-<div class="sidebar menu_show_cart_pv " id="sidebar">
+<div class="sidebar menu_show_cart_pv show " id="sidebar">
 
     <?php
 //        include "./template/chat/show_user/search.php";

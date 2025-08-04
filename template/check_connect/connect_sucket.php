@@ -125,13 +125,13 @@
 
         socket.on('new-message', (data) => {
 
-            $(".container_check_connection").removeClass("active");
-
             if ( Object.keys(data).length > 0)
             {
 
                 if ( data.message_mode == "preliminary_report" )
                 {
+
+                    $(".container_check_connection").removeClass("active");
 
                     // ----------------------
                     // get message and add to array array_user_pv
@@ -250,12 +250,12 @@
                             }
                             else
                             {
-
                                 const badgeHtml = $(`.chat-item[id_pv="${sender_id}"] .unread-badge`).html();
                                 let unreadCount = Number(badgeHtml) || 0;
                                 unreadCount += 1;
                                 $(`.chat-item[id_pv="${sender_id}"] .unread-badge`).html(unreadCount);
 
+                                hiden_finction_pv ( sender_id )
                             }
 
                         } else {
@@ -311,6 +311,9 @@
                                 </div>
                             </div>`;
             target.append(pv_html)
+
+
+            hiden_finction_pv ( id_vp )
         }
 
         // ایا پیوی وجود دارد یا خیر
@@ -346,7 +349,6 @@
             $(".chat-header").attr("id_pv", id);
 
             $(this).find(".unread-badge").html("");
-
 
             array_user_pv = JSON.parse( sessionStorage.getItem('array_user_pv') );
 
@@ -387,6 +389,7 @@
                 $container.scrollTop($container[0].scrollHeight);
             }
 
+            hiden_finction_pv(id);
         })
 
         // --------------------------------------------------------------------------------------------------------------------
@@ -445,6 +448,23 @@
                     behavior: 'smooth'
                 });
             }
+        }
+
+        // --------------------------------------------------------------------------------------------------------------------
+        // hiden counter pv
+        // --------------------------------------------------------------------------------------------------------------------
+
+        function hiden_finction_pv ( id_pv ) {
+
+            let counter = $(`.chat-item[id_pv=${id_pv}]`).find(".unread-badge").html();
+            let countNumber = Number((counter || '').trim()) || 0;
+
+            if ( countNumber == 0 ) {
+                $(`.chat-item[id_pv=${id_pv}]`).find(".unread-badge").addClass("background_number");
+            } else {
+                $(`.chat-item[id_pv=${id_pv}]`).find(".unread-badge").removeClass("background_number");
+            }
+
         }
         
     })

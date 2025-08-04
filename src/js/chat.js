@@ -12,7 +12,7 @@ jQuery(document).ready(function ($) {
 
     // close
 
-    $(".screen_black").click(function (e) {
+    $(".menu_show_cart_pv").on("click",".chat-item",function (e) {
         $(".menu_show_cart_pv").removeClass("show");
         $(".screen_black").removeClass("active");
     })
